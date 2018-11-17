@@ -1,6 +1,7 @@
 using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 
 namespace Yahoo_Scrape
 {
@@ -13,12 +14,14 @@ namespace Yahoo_Scrape
             {
                 //Console.WriteLine("TEST!");
                 //driver.Manage().Timeouts().PageLoad = TimeSpan.FromMinutes(3);
-                driver.Navigate().GoToUrl("https://yahoo.com/");
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                driver.Navigate().GoToUrl("https://finance.yahoo.com/");
+                wait.Until(ExpectedConditions.ElementExists(By.Id("uh-signedin")));
 
                 try
                 {
                     //driver.FindElement(By.XPath("//*[@id = 'uh-signin']/a")).Click();
-                    driver.FindElement(By.XPath(".//a[@id = 'uh-signin']")).Click();
+                    driver.FindElement(By.XPath(".//a[@id = 'uh-signedin']")).Click();
 
 
                     Console.WriteLine("Email:");
@@ -34,7 +37,10 @@ namespace Yahoo_Scrape
                     driver.FindElement(By.XPath(".//input[@id = 'login-passwd']")).SendKeys(passWord);
                     driver.FindElement(By.XPath(".//button[@id = 'login-signin']")).Click();
 
-                    driver.FindElement(By.XPath("./a[@href="https://finance.yahoo.com/"]")).Click();
+                    driver.FindElement(By.XPath(".//a[@title = 'My Portfolio']")).Click();
+
+                    driver.FindElement(By.XPath(".//a[@href='/portfolio/p_1']")).Click();
+
                 }
 
                 catch (Exception e)
