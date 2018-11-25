@@ -1,6 +1,7 @@
 using System;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
 namespace Yahoo_Scrape
@@ -20,7 +21,6 @@ namespace Yahoo_Scrape
 
                 try
                 {
-                    //driver.FindElement(By.XPath("//*[@id = 'uh-signin']/a")).Click();
                     driver.FindElement(By.XPath(".//a[@id = 'uh-signedin']")).Click();
 
 
@@ -37,9 +37,15 @@ namespace Yahoo_Scrape
                     driver.FindElement(By.XPath(".//input[@id = 'login-passwd']")).SendKeys(passWord);
                     driver.FindElement(By.XPath(".//button[@id = 'login-signin']")).Click();
 
+                    // Navigate to My portfolio page
                     driver.FindElement(By.XPath(".//a[@title = 'My Portfolio']")).Click();
 
-                    driver.FindElement(By.XPath(".//a[@href='/portfolio/p_1']")).Click();
+                    // Wit for pop up, then click 'x' to exit pop up
+                    wait.Until(ExpectedConditions.ElementExists(By.XPath("//dialog[@id = '__dialog']/section/button")));
+                    driver.FindElement(By.XPath("//dialog[@id = '__dialog']/section/button")).Click();
+
+                    // Ready to scrape data to console
+
 
                 }
 
