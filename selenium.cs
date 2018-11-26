@@ -44,7 +44,13 @@ namespace Yahoo_Scrape
                     wait.Until(ExpectedConditions.ElementExists(By.XPath("//dialog[@id = '__dialog']/section/button")));
                     driver.FindElement(By.XPath("//dialog[@id = '__dialog']/section/button")).Click();
 
+                    // Click on watch list under Portfolio
+                    driver.FindElement(By.XPath("//*[@id=\"main\"]/section/section/div[2]/table/tbody/tr[1]/td[1]/a")).Click();
+
+
                     // Ready to scrape data to console
+                    var stockList = driver.FindElement(By.XPath("//table[contains(@class,'_1TagL')]"));
+                    Console.WriteLine(stockList);
 
 
                 }
