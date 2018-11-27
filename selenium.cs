@@ -49,8 +49,11 @@ namespace Yahoo_Scrape
 
 
                     // Ready to scrape data to console
-                    var stockList = driver.FindElement(By.XPath("//table[contains(@class,'_1TagL')]"));
-                    Console.WriteLine(stockList);
+                    wait.Until(ExpectedConditions.ElementExists(By.XPath("//html[1]/body[1]/div[2]/div[3]/section[1]/section[2]/div[2]/table[1]/tbody[1]")));
+                    var table = driver.FindElement(By.XPath("/html[1]/body[1]/div[2]/div[3]/section[1]/section[2]/div[2]/table[1]/tbody[1]"));
+                    var children = table.FindElements(By.XPath(".//*"));
+                    Console.WriteLine(table);
+                    Console.WriteLine(children[0].GetAttribute("data-key"));
 
 
                 }
