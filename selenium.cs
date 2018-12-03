@@ -6,6 +6,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
+
 namespace Yahoo_Scrape
 {
     class Program
@@ -51,17 +52,27 @@ namespace Yahoo_Scrape
                 wait.Until(ExpectedConditions.ElementExists(By.XPath("//html[1]/body[1]/div[2]/div[3]/section[1]/section[2]/div[2]/table[1]/tbody[1]")));
                 var table = driver.FindElement(By.XPath("/html[1]/body[1]/div[2]/div[3]/section[1]/section[2]/div[2]/table[1]/tbody[1]"));
                 var children = table.FindElements(By.XPath(".//*"));
-                Console.WriteLine(table);
+                //Console.WriteLine(table);
 
                 List<IWebElement> elements = new List<IWebElement>();
                 elements = driver.FindElements(By.XPath("//tbody/tr")).ToList<IWebElement>();
 
+
+                List<Stock> PortStocks = new List<Stock>();
+
                 foreach (var stock in elements)
                 {    
                     var newStock = Convert.ToString(stock.Text);
-                    Console.WriteLine(newStock);
+                    string[] anotherStock = newStock.Split(' ');
+                    PortStocks.Add(new Stock() { StockSymbol = anotherStock[0], LastPrice = anotherStock[1]});
                 }
 
+                foreach (var stock in PortStocks)
+                {
+                    Console.WriteLine(stock.StockSymbol);
+                    Console.WriteLine(stock.LastPrice);
+
+                }
             }
         }
     }
