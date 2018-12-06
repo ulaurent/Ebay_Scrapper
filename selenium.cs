@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Npgsql;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
@@ -64,15 +65,47 @@ namespace Yahoo_Scrape
                 {    
                     var newStock = Convert.ToString(stock.Text);
                     string[] anotherStock = newStock.Split(' ');
-                    PortStocks.Add(new Stock() { StockSymbol = anotherStock[0], LastPrice = anotherStock[1]});
-                }
+                    //foreach(var item in anotherStock)
+                    //{
+                    //    Console.WriteLine(item);
+                    //}
+                    PortStocks.Add(new Stock() { StockSymbol = anotherStock[0], LastPrice = anotherStock[1], 
+                                                MarketTime = "0"+anotherStock[5]+":00",
+                                                PriceChange = anotherStock[2], PercentChange = anotherStock[3]});
+                } 
 
                 foreach (var stock in PortStocks)
                 {
                     Console.WriteLine(stock.StockSymbol);
                     Console.WriteLine(stock.LastPrice);
-
+                    Console.WriteLine(stock.MarketTime);
+                    Console.WriteLine(stock.PriceChange);
+                    Console.WriteLine(stock.PercentChange);
                 }
+
+
+
+                // Set Up Local Database
+                var connString = "Host=localhost;Username=urbensonlaurent;Password=davidbabo16;Database=teststocks";
+
+                using (var connect = new NpgsqlConnection(connString))
+                {
+                    connect.Open();
+
+                    // Insert some data
+                    using (var cmd = new NpgsqlCommand())
+                    {
+                        cmd.Connection = connect;
+                        foreach (var stock in PortStocks)
+                        {
+                            string data = string.Format("INSERT INTO stockington (SYMBOL, LASTPRICE, CHANGE, DATETIME) VALUES ('{0}','{1}',{2},'{3}')", stock.StockSymbol, stock.LastPrice, stock.PriceChange, stock.MarketTime); 
+                            cmd.CommandText = data;
+                            cmd.ExecuteNonQuery();
+                        }
+
+                    }
+                }
+
             }
         }
     }
